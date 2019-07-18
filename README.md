@@ -14,7 +14,7 @@ Three cans of beans for the price of two.
 Two cans of Coke, for £1.
 
 Use the following example of a receipt to know what data needs to be captured. There is no requirement to actually format or print a receipt.
-
+```
 Beans                0.50
 Beans                0.50
 Beans                0.50
@@ -32,7 +32,7 @@ Coke 2 for £1       -0.40
 Total savings       -0.90
 -------------------------
 Total to Pay         2.40
-
+```
 Ref : https://policyexpert.github.io/coding-assessment/ and http://codekata.com/kata/kata01-supermarket-pricing/
 
 ## Implementation Details:
