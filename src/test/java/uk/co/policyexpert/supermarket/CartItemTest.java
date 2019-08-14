@@ -17,7 +17,7 @@ public class CartItemTest {
 
 	@Test
 	public void testGetLineItemTotalBeforeDiscount() {
-		assertTrue(10.0f == lineItem.getLineItemTotalBeforeDiscount());
+		assertTrue(10.0f == lineItem.getLineItemTotalBeforeDiscount().floatValue());
 	}
 
 }

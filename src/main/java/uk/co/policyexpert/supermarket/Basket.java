@@ -1,10 +1,13 @@
 package uk.co.policyexpert.supermarket;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import uk.co.policyexpert.supermarket.offers.Offer;
 
@@ -12,11 +15,11 @@ public class Basket {
 
 	private List<CartItem> cartItemList = new ArrayList<>();
 
-	private Float totalPriceBeforeDiscount = 0.0f;
+	private BigDecimal totalPriceBeforeDiscount = new BigDecimal(0.0f,MathContext.DECIMAL64);
 
-	private Float totalPriceAfterDiscount = 0.0f;
+	private BigDecimal totalPriceAfterDiscount = new BigDecimal(0.0f,MathContext.DECIMAL64);
 
-	private Float totalDiscount = 0.0f;
+	private BigDecimal totalDiscount = new BigDecimal(0.0f,MathContext.DECIMAL64);
 
 	/* Key Value Pair of product code and Offer. */
 	Map<String, Offer> offerMap = new HashMap<>();
@@ -63,8 +66,8 @@ public class Basket {
 		int idxPos = cartItemList.indexOf(cartItem);
 		if( idxPos != -1) {
 			cartItem = cartItemList.get(idxPos);
-			int qty = cartItem.reduceOne();
-			if(qty == 0) {
+			BigDecimal qty = cartItem.reduceOne();
+			if(qty.floatValue() == 0) {
 				cartItemList.remove(cartItem);
 			}
 			isLineItemReduced = true;
@@ -74,10 +77,10 @@ public class Basket {
 	}
 	
 	private void refreshTotal() {
-		totalPriceBeforeDiscount = 0.0f;
-		cartItemList.forEach(item -> totalPriceBeforeDiscount += item.getLineItemTotalBeforeDiscount());
+		totalPriceBeforeDiscount = new BigDecimal(0.0f,MathContext.DECIMAL64);
+		cartItemList.forEach(item -> totalPriceBeforeDiscount = totalPriceBeforeDiscount.add(item.getLineItemTotalBeforeDiscount()));
 		totalDiscount = discountStrategy.calculateDiscount(this.offerMap, this.cartItemList);
-		totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
+		totalPriceAfterDiscount = totalPriceBeforeDiscount.subtract(totalDiscount);
 	}
 
 	/**
@@ -90,16 +93,19 @@ public class Basket {
 	/**
 	 * @return the totalPriceBeforeDiscount
 	 */
-	public Float getTotalPriceBeforeDiscount() {
+	public BigDecimal getTotalPriceBeforeDiscount() {
 		return totalPriceBeforeDiscount;
 	}
 
-	public Float getTotalPriceAfterDiscount() {
+	public BigDecimal getTotalPriceAfterDiscount() {
 		return totalPriceAfterDiscount;
 	}
 
-	public Float getTotalDiscount() {
+	public BigDecimal getTotalDiscount() {
 		return totalDiscount;
 	}
 
+	public Optional<CartItem> findCartItemByProductCode(String productCode){
+		return this.getCartItems().stream().filter(item -> item.getProduct().getProductCode().equals(productCode)).findFirst();
+	}
 }

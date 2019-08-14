@@ -1,19 +1,21 @@
 package uk.co.policyexpert.supermarket.offers;
 
+import java.math.BigDecimal;
+
 import uk.co.policyexpert.supermarket.Product;
 
 public class Offer {
 
 	private final Product product;
 	private final DiscountType discountType;
-	private final int quantity;
+	private final BigDecimal quantity;
 	
 	/**
 	 * @param product
 	 * @param quantity
 	 * @param discountType
 	 */
-	public Offer(Product product, int quantity, DiscountType discountType) {
+	public Offer(Product product, BigDecimal quantity, DiscountType discountType) {
 		super();
 		this.product = product;
 		this.quantity = quantity;
@@ -28,7 +30,7 @@ public class Offer {
 	/**
 	 * @return the quantity
 	 */
-	public int getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 	/**

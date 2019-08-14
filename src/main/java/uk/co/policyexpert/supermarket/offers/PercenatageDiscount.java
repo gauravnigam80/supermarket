@@ -1,18 +1,20 @@
 package uk.co.policyexpert.supermarket.offers;
 
+import java.math.BigDecimal;
+
 import uk.co.policyexpert.supermarket.CartItem;
 
 public class PercenatageDiscount implements Discount{
 
-    private float discountPercent ;
+    private BigDecimal discountPercent ;
 
-    public float getDiscountPercent() {
+    public BigDecimal getDiscountPercent() {
         return discountPercent;
     }
 
-    public PercenatageDiscount(float discountPercent) {
+    public PercenatageDiscount(BigDecimal discountPercent) {
         super();
-      	assert discountPercent <= 1;
+      	assert discountPercent.floatValue() <= 1;
         this.discountPercent = discountPercent;
     }
 
@@ -22,8 +24,8 @@ public class PercenatageDiscount implements Discount{
     }
 
 	@Override
-	public float applyDiscount(CartItem lineItem) {
-		return lineItem.getLineItemTotalBeforeDiscount() - (lineItem.getLineItemTotalBeforeDiscount() * ( discountPercent));
+	public BigDecimal applyDiscount(CartItem lineItem) {
+		return lineItem.getLineItemTotalBeforeDiscount().subtract(lineItem.getLineItemTotalBeforeDiscount().multiply(discountPercent));
 	}
 
 }

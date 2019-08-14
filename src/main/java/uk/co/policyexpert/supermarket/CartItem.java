@@ -1,46 +1,51 @@
 package uk.co.policyexpert.supermarket;
 
+import java.math.BigDecimal;
+
 public class CartItem {
 
 	private final Product product;
 
-	private Integer quantity;
+	private BigDecimal quantity;
 	
-	private Float weight ;
+	private BigDecimal weight ;
 
 	
 	/**
 	 * @param product
 	 */
-	public CartItem(Product product, Integer quantity) {
+	public CartItem(Product product, BigDecimal quantity, BigDecimal weight) {
 		super();
 		this.product = product;
 		this.quantity = quantity;
+		this.weight = weight;
 	}
 
+	public CartItem(Product product, BigDecimal quantity) {
+		this(product,quantity,null);
+	}
 	/**
 	 * @param product
 	 */
 	public CartItem(Product product) {
-		this(product, 1); 
+		this(product, new BigDecimal(1),null); 
 	}
 
 	/**
 	 * @param product
 	 * @param weight
 	 */
-	public CartItem(Product product, Float weight) {
+	/*public CartItem(Product product, BigDecimal weight) {
 		this(product); 
-		this.weight = weight;
-	}
+	}*/
 
 
-	public Float getLineItemTotalBeforeDiscount() {
+	public BigDecimal getLineItemTotalBeforeDiscount() {
 		switch(product.getProductType()) {
 		case LOOSE : 
-			return this.weight * product.getPrice().getUnitPrice();
+			return this.product.getPrice().getUnitPrice().multiply(this.weight);
 		default : 	
-			return quantity * this.product.getPrice().getUnitPrice() ;
+			return this.product.getPrice().getUnitPrice().multiply(this.quantity) ;
 		}
 	}
 
@@ -56,21 +61,21 @@ public class CartItem {
 	/**
 	 * @return the quantity
 	 */
-	public Integer addOne() {
-		return quantity = quantity + 1;
+	public BigDecimal addOne() {
+		return quantity = quantity.add(BigDecimal.ONE);
 	}
 
 	/**
 	 * @return the quantity
 	 */
-	public Integer reduceOne() {
-		return quantity = quantity - 1;
+	public BigDecimal reduceOne() {
+		return quantity = quantity.subtract(BigDecimal.ONE);
 	}
 	
 	/**
 	 * @return the quantity
 	 */
-	public Integer getQuantity() {
+	public BigDecimal getQuantity() {
 		return quantity;
 	}
 
